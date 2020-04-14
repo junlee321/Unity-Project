@@ -4,31 +4,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    [Tooltip("In ms^-1")][SerializeField] float xSpeed = 20f;
-    [Tooltip("In ms^-1")][SerializeField] float ySpeed = 20f;
-    [SerializeField] float xRange = 15f;
-    [SerializeField] float yRange = 10f;
+    [Header("General")]
+    [Tooltip("In ms^-1")][SerializeField] float xSpeed = 25f;
+    [Tooltip("In ms^-1")][SerializeField] float ySpeed = 25f;
+    [SerializeField] float xRange = 13f;
+    [SerializeField] float yRange = 9f;
 
+    [Header("Screen-position Based")]
     [SerializeField] float positionPitchFactor = -1.5f;
-    [SerializeField] float controlPitchFactor = -15f;
-    [SerializeField] float positionYawFactor = -1.5f;
+    [SerializeField] float positionYawFactor = 1.5f;
+
+    [Header("Control-throw Base")]
     [SerializeField] float controlRollFactor = -10f;
+    [SerializeField] float controlPitchFactor = -15f;
 
     float xThrow, yThrow;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    bool isControlEnabled = true;
 
     // Update is called once per frame
     void Update()
     {
-        ProcessTranslation();
-        ProcessRotation();
+        if (isControlEnabled)
+        {
+            ProcessTranslation();
+            ProcessRotation();
+        }
+
+    }
+
+    private void OnPlayerDeath() // Call by string reference
+    {
+        print("Movement Stoped");
+        isControlEnabled = false;
     }
 
     private void ProcessRotation()
@@ -61,4 +71,6 @@ public class Player : MonoBehaviour
         transform.localPosition = new Vector3(clampedXPos, transform.localPosition.y, transform.localPosition.z);
         transform.localPosition = new Vector3(transform.localPosition.x, clampedYPos, transform.localPosition.z);
     }
+
+
 }
