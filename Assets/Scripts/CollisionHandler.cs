@@ -5,15 +5,23 @@ using UnityEngine.SceneManagement; // ok as loon as this is the only script that
 
 public class CollisionHandler : MonoBehaviour
 {
-    [SerializeField] float levelLoadDelay = 1f;
+    [Tooltip("In seconds")][SerializeField] float levelLoadDelay = 1f;
+    [Tooltip("FX prefab on player")][SerializeField] GameObject deathFX;
+
 
     void OnTriggerEnter(Collider other)
     {
-        print("Player Trigger something");
         StartDeathSequence();
+        deathFX.SetActive(true);
+        Invoke("ReloadLevel", levelLoadDelay);
     }
     private void StartDeathSequence()
     {
         SendMessage("OnPlayerDeath");
+    }
+
+    private void ReloadLevel() // is string referenced
+    {
+        SceneManager.LoadScene(1);
     }
 }
